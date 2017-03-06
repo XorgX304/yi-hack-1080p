@@ -1,5 +1,5 @@
 ===============
-Yi-hack project
+Yi-hack-1080p project
 ===============
 
 Personnal note - 4 october 2016
@@ -58,7 +58,7 @@ Prepare the memory card
 Clone this repository on a computer :
 
     git clone http://github.com/fritz-smh/yi-hack.git
-    
+
 Then, format a micro SD card in fat32 (vfat) format and copy the content of the **yi-hack/sd/** folder at the root of your memory card.
 
 The memory card will so contain :
@@ -123,7 +123,7 @@ Access the video stream over RTSP
 
 RTSP server is on port 554.
 
-You can access the video over RTSP on 3 urls : 
+You can access the video over RTSP on 3 urls :
 * High definition video and audio (h264) : http://ip:554/ch0_0.h264
 * Low definition video and audio (h264) : http://ip:554/ch0_1.h264
 * Audio (h264) : http://ip:554/ch0_3.h264
@@ -139,7 +139,7 @@ Each time a motion is detected, the camera will generate a video file (60s max).
 
 The simplest way is to browse the file from the http server.
 
-To know if a motion have been detected in the last minute, you can check the url http://ip/motion (GET). It can give : 
+To know if a motion have been detected in the last minute, you can check the url http://ip/motion (GET). It can give :
 * when no motion is detected : an empty content
 * when motion is detected : a file path to the video file from the root of the http server
 
@@ -148,7 +148,7 @@ Telnet server
 
 The telnet server is on port 23.
 
-Default login/password : 
+Default login/password :
 * login = root
 * password = 1234qwer (unless you specified another password in yi-hack.cfg file)
 
@@ -177,10 +177,10 @@ Edit equip_test.sh to look like this:
     ######################################################
     # Xiaomi Yi hack restore
     ######################################################
-     
+
     ### Rename back the timeout sound file ...
     [ -f /home/timeout.g726.OFF ] && mv /home/timeout.g726.OFF /home/timeout.g726
-     
+
     sync
 
 Then reboot the camera so the script runs. After remove the stuff from sd card and you are all original.
@@ -193,7 +193,7 @@ Hack content
 ------------
 
 ```
-home                           Official firmware 
+home                           Official firmware
 test/                          Yi hack folder
   yi-hack.cfg                  Yi hack configuration file
   equip_test.sh                This script is called on camera startup and will launch all the needed processes
@@ -219,5 +219,3 @@ check_motion.sh
 Script that runs from equip_test.sh and tell us if a new video was created in the last minute (a video file is created in case of motion detection).
 
 If a file is found, it adds the name of the file to the section GET /motion on the http server.
-
-
