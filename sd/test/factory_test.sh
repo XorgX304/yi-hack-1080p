@@ -8,24 +8,18 @@
 #
 # * no more cloud!
 # * network configuration done in this file. No more need to use a Xiaomi app on a smartphone!
-# * http server   : port 80
 # * telnet server : port 23
 # * ftp server    : port 21
 # * rtsp server   : port 554
-#      rtsp://192.168.1.121:554/ch0_0.h264     : replace with your ip
-#      rtsp://192.168.1.121:554/ch0_1.h264     : replace with your ip
+#      rtsp://x.x.x.x/ch0_0.h264     : replace with your ip
 #
 # How it works
 # ============
 #
-# See http://github.com/fritz-smh/yi-hack/
+# See https://github.com/xmflsct/yi-hack-1080p
 
 LOG_DIR=/tmp/sd/test/
 LOG_FILE=${LOG_DIR}/log.txt
-
-log_init() {
-  echo "Starting to log..." > ${LOG_FILE}
-}
 
 log() {
   echo "$@" >> ${LOG_FILE}
@@ -40,44 +34,34 @@ get_config() {
 # start of our custom script
 ######################################################
 
-log_init()
+echo "Starting to log..." > ${LOG_FILE}
+log "[INIT] Your firmware version is:"
+log $(cat /home/homever)
 
 ### Take over from original init.sh
-echo "[INIT] Killing original init.sh script."
+log "[INIT] Killing original init.sh script."
 ps | grep /home/app/init.sh | grep -v "grep" | awk '{print $1}' | xargs kill -9
 
 ### set the root password
 root_pwd=$(get_config ROOT_PASSWORD)
 [ $? -eq 0 ] &&  echo "root:$root_pwd" | chpasswd
 
-### Update factory_test sleep duration
-# if [ ! -f "/home/app/script/factory_test.sh.backup" ]; then
-#   echo "[TEST] Create a backup file of original factory_test.sh."
-#   cp /home/app/script/factory_test.sh /home/app/script/factory_test.sh.backup
-#   echo "[TEST] Reduce default sleep duration."
-#   sed -i 's/1000/5/g' /home/app/script/factory_test.#!/bin/sh
-#   echo "[TEST] Rebboting now."
-#   reboot
-# else
-#   echo "[good] factory_test.sh sleep duration has been reduced."
-# fi
-
 ### Update a new busybox
-if [ ! -f "/home/app/busybox" ]; then
-  echo "[BUSYBOX] Copy busybox 1.16.1 to system."
-  cp /tmp/sd/test/app/busybox /home/app/busybox
+if [ ! -f "/home/app/localbin/busybox" ]; then
+  log "[BUSYBOX] Copy busybox 1.16.1 to system."
+  cp /tmp/sd/test/app/busybox /home/app/localbin/busybox
+  chmod +x /home/app/localbin/busybox
 else
-  echo "[good] busybox 1.16.1 is in the system."
+  log "[good] busybox 1.16.1 is in the system."
 fi
 
-### Solve region ban
-if [ ! -f "/home/app/cloud.backup" ]; then
-  echo "[REGION] Create a backup file of original cloud file."
-  cp /home/app/cloud /home/app/cloud.backup
-  echo "[REGION] Solve region ban."
-  sed -i 's|api.xiaoyi.com/v4/ipc/check_did|api.xiaoyi.cox/v4/ipc/check_did|g' /home/app/cloud
+### Update RTSP server
+if [ ! -f "/home/app/localbin/rtsp2301" ]; then
+  log "[RTSP SERVER] Copy rtsp2301 to system."
+  cp /tmp/sd/test/app/rtsp2301 /home/app/localbin/rtsp2301
+  chmod +x /home/app/localbin/rtsp2301
 else
-  echo "[good] region ban has been removed."
+  log "[good] rtsp2301 is in the system."
 fi
 
 ######################################################
@@ -169,24 +153,18 @@ else
   log "Done"
 fi
 
-log "Configuration is :"
-ifconfig | sed "s/^/    /" >> ${LOG_FILE}
+### Ping test until connected
+until ping -c1 $(get_config TESTSERVER) &>/dev/null; do :; done
 
-### Check if reaching gateway and notify
-# GATEWAY=$(ip route | awk '/default/ { print $3 }')
-# ping -c1 -W2 $GATEWAY > /dev/null
-# if [ 0 -eq $? ]; then
-#     # /home/rmm "/home/hd1/voice/success.g726" 1
-# else
-# fi
+log "Configuration is:"
+ifconfig | sed "s/^/    /" >> ${LOG_FILE}
 
 ### configure time on a NTP server
 log "Get time from a NTP server..."
 NTP_SERVER=$(get_config NTP_SERVER)
-log "But first, test the NTP server '${NTP_SERVER}':"
-ping -c1 ${NTP_SERVER} >> ${LOG_FILE}
+until ping -c1 $(get_config NTP_SERVER) &>/dev/null; do :; done
 log "Previous datetime is $(date)"
-/home/app/busybox ntpd -q -p ${NTP_SERVER}
+/home/app/localbin/busybox ntpd -q -p ${NTP_SERVER}
 log "Done"
 log "New datetime is $(date)"
 
@@ -194,9 +172,9 @@ log "New datetime is $(date)"
 # FROM ORIGINAL INIT.SH
 ######################################################
 
-cd /home/app
-./log_server &
-./dispatch &
+### cd /home/app
+### ./log_server &
+### ./dispatch &
 
 cd /home/hisiko
 ./load3518e -i
@@ -205,14 +183,14 @@ himm 0x201200c8 0x23c2e
 himm 0x201200d8 0x0d1ec001
 
 insmod /home/base/hi_cipher.ko
-cd /home/app
-./rmm &
-sleep 2
-./mp4record &
-./cloud &
-./p2p_tnp &
-./oss &
-./watch_process &
+### cd /home/app
+### ./rmm &
+### sleep 2
+### ./mp4record &
+### ./cloud &
+### ./p2p_tnp &
+### ./oss &
+### ./watch_process &
 #lua /home/app/script/cifs.luac /home/app/recbackup &
 insmod /home/app/localko/watchdog.ko
 
@@ -221,34 +199,17 @@ insmod /home/app/localko/watchdog.ko
 ######################################################
 
 ### Launch Telnet server
-log "Start telnet server..."
-/home/app/busybox telnetd &
+log "Starting telnet server..."
+/home/app/localbin/busybox telnetd &
 
 ### Launch FTP server
-log "Start ftp server..."
-/home/app/busybox tcpsvd -vE 0.0.0.0 21 /home/app/busybox ftpd -w / &
-sleep 1
-log "Checking for ftp process: "
-ps | grep tcpsvd | grep -v grep >> ${LOG_FILE}
+log "Starting FTP server..."
+/home/app/localbin/busybox tcpsvd -vE 0.0.0.0 21 /home/app/localbin/busybox ftpd -w / &
 
-### Launch HTTP server
-# first, prepare the index.html page
-cd /tmp/sd/test/app/http/
-cat index.html.tpl_header ${TMP_VERSION_FILE} index.html.tpl_footer > index.html
-
-# then, bind the record folder
-# mkdir /home/hd1/test/http/record/
-# mount -o bind /home/hd1/record/ /home/hd1/test/http/record/
-
-# prepare the GET /motion url
-/home/app/busybox touch motion
-
-# start the server
-log "Start http server: server${HTTP_VERSION}..."
-./httpserver 80 &
-sleep 1
-log "Check for http server process : "
-ps | grep httpserver | grep -v grep | grep -v log_server >> ${LOG_FILE}
+### Launch RTSP server
+log "Starting RTSP server..."
+#/home/app/localbin/busybox script -c "/home/app/localbin/rtsp2301" /dev/null
+/home/app/localbin/rtsp2301 >& /dev/null &
 
 sync
 
@@ -261,7 +222,5 @@ ps >> ${LOG_FILE}
 ### List storage status
 log "Storage status :"
 df >> ${LOG_FILE}
-
-/tmp/sd/test/app/rtsp_server
 
 sync
