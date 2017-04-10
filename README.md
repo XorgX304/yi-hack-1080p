@@ -4,7 +4,7 @@ This project enables Xiaomi Cameras with HiSilicon Hi3518E V200 chipset to have 
 
 Currently this project supports **Yi 1080p Home** camera with firmware version equals or below **2.0.0.1A_201612051401**.
 
-** NOTE**
+**NOTE**
 * This project does not support Yi 1080p Home **Version 2**. For the support of V2, please refer to [niclet/yi-hack-v2](https://github.com/niclet/yi-hack-v2).
 * This hack will disable cloud usage, following the approach of [fritz-smh/yi-hack](https://github.com/fritz-smh/yi-hack).
 * If you would like to have cloud accessibility, please refer to this awesome project [shadow-1/yi-hack-v3](https://github.com/shadow-1/yi-hack-v3).
