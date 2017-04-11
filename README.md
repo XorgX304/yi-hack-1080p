@@ -11,7 +11,7 @@ This project enables Xiaomi Cameras with HiSilicon Hi3518E V200 chipset to have 
 
 Currently this project supports **Yi 1080p Home** camera with firmware version equals or below **2.0.0.1A_201612051401**.
 
-<center>**- NOTE -**</center>
+**- NOTE -**
 
 * This project does not support Yi 1080p Home **Version 2**. For the support of V2, please refer to [niclet/yi-hack-v2](https://github.com/niclet/yi-hack-v2).
 * This hack will disable cloud usage, following the approach of [fritz-smh/yi-hack](https://github.com/fritz-smh/yi-hack).
@@ -19,7 +19,7 @@ Currently this project supports **Yi 1080p Home** camera with firmware version e
   * The above project will enable you to use full functionality with official mobile application. However, RTSP streaming is currently not possible with the official approach.
   * The above project will upgrade your firmware to a version above that can be supported with this hack. A downgrade is possible, but need some extra effort.
 
-<center>![](yi.png)</center>
+![](yi.png)
 
 ## Features
 
