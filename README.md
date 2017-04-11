@@ -1,17 +1,25 @@
+*- for lazy readers, here summarizes what you are looking for -*
+
+||RTSP stream|Use with Mi App|
+|---|---|---|
+|**[shadow-1/yi-hack-v3](https://github.com/shadow-1/yi-hack-v3)**|**NO**, not possible at the moment|**YES**, full support with proxy|
+|**[xmflsct/yi-hack-1080p](https://github.com/xmflsct/yi-hack-1080p)**|**YES**, currently only 720p streaming|**NO**|
+
 # yi-hack-1080p
 
 This project enables Xiaomi Cameras with HiSilicon Hi3518E V200 chipset to have RTSP streaming of live video feed.
 
 Currently this project supports **Yi 1080p Home** camera with firmware version equals or below **2.0.0.1A_201612051401**.
 
-**NOTE**
+<center>**- NOTE -**</center>
+
 * This project does not support Yi 1080p Home **Version 2**. For the support of V2, please refer to [niclet/yi-hack-v2](https://github.com/niclet/yi-hack-v2).
 * This hack will disable cloud usage, following the approach of [fritz-smh/yi-hack](https://github.com/fritz-smh/yi-hack).
 * If you would like to have cloud accessibility, please refer to this awesome project [shadow-1/yi-hack-v3](https://github.com/shadow-1/yi-hack-v3).
   * The above project will enable you to use full functionality with official mobile application. However, RTSP streaming is currently not possible with the official approach.
   * The above project will upgrade your firmware to a version above that can be supported with this hack. A downgrade is possible, but need some extra effort.
 
-![](yi.png)
+<center>![](yi.png)</center>
 
 ## Features
 

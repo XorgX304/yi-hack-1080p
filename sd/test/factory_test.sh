@@ -135,7 +135,6 @@ log $(find /tmp -name "wpa_supplicant.conf")
 log "Start wifi configuration..."
 res=$(/home/base/tools/wpa_supplicant -c/tmp/wpa_supplicant.conf -g/var/run/wpa_supplicant-global -iwlan0 -B)
 log "Status for wifi configuration=$? (0 is ok)"
-log "Wifi configuration answer: $res"
 
 if [[ $(get_config DHCP) == "yes" ]] ; then
   log "Do network configuration (DHCP)"
