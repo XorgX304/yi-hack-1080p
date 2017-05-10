@@ -64,6 +64,15 @@ else
   log "[good] rtsp2301 is in the system."
 fi
 
+### Update RTSP watch server
+if [ ! -f "/home/app/localbin/rtsp2301_watch.sh" ]; then
+  log "[RTSP SERVER] Copy rtsp2301_watch.sh to system."
+  cp /tmp/sd/test/app/rtsp2301_watch.sh /home/app/localbin/rtsp2301_watch.sh
+  chmod +x /home/app/localbin/rtsp2301_watch.sh
+else
+  log "[good] rtsp2301_watch.sh is in the system."
+fi
+
 ######################################################
 # FROM ORIGINAL INIT.SH
 ######################################################
@@ -208,7 +217,8 @@ log "Starting FTP server..."
 ### Launch RTSP server
 log "Starting RTSP server..."
 #/home/app/localbin/busybox script -c "/home/app/localbin/rtsp2301" /dev/null
-/home/app/localbin/rtsp2301 >& /dev/null &
+#/home/app/localbin/rtsp2301 >& /dev/null &
+/home/app/localbin/rtsp2301_watch.sh &
 
 sync
 
