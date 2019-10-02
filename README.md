@@ -1,3 +1,6 @@
+### No longer being maintained
+This project is no longer being maintained. Please refer to [TheCrypt0/yi-hack-v4](https://github.com/TheCrypt0/yi-hack-v4) for the latest possibilities with Yi cams.
+
 *- for lazy readers, here summarizes what you are looking for -*
 
 ||RTSP stream|Use with Mi App|
